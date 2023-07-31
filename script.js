@@ -1,22 +1,16 @@
 const gameBoard = (() => {
   const boardArray = ["", "", "", "", "", "", "", "", ""];
   const spaces = document.querySelectorAll("div.space");
+  const getSpaces = spaces;
   const displayBoard = () => {
     spaces.forEach((space, currentIndex) => {
       space.textContent = boardArray[currentIndex];
     });
   };
-  const clickSpace = (currentPlayer) => {
-    spaces.forEach((space, currentIndex) => {
-      space.addEventListener("click", () => {
-        currentPlayer.placeMarker(currentIndex, currentPlayer.getMarker());
-      });
-    });
-  };
   return {
+    getSpaces,
     boardArray,
     displayBoard,
-    clickSpace,
   };
 })();
 
@@ -35,9 +29,27 @@ const Player = (name, marker) => {
 };
 
 const gameController = (() => {
+  const players = [Player("Dean", "X"), Player("Bob", "O")];
+  let currentPlayer = players[0];
+  const changePlayer = () => {
+    if (currentPlayer === players[0]) {
+      currentPlayer = players[1];
+    } else {
+      currentPlayer = players[0];
+    }
+  };
+  const clickSpace = () => {
+    gameBoard.getSpaces.forEach((space, spaceIndex) => {
+      space.addEventListener("click", () => {
+        takeTurn(spaceIndex);
+      });
+    });
+  };
+  const takeTurn = (space) => {
+    currentPlayer.placeMarker(space);
+    changePlayer();
+  };
 
+  return { clickSpace };
 })();
-const playerX = Player("Dean", "X");
-const playerO = Player("Bob", "O");
-gameBoard.clickSpace(playerX);
-gameBoard.clickSpace(playerO);
+gameController.clickSpace();
