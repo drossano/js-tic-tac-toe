@@ -18,11 +18,8 @@ const Player = (name, marker) => {
   const getName = () => name;
   const getMarker = () => marker;
   const placeMarker = (index) => {
-    if (gameBoard.boardArray[index] === "") {
-      gameBoard.boardArray[index] = marker;
-    } else {
-      return;
-    }
+    gameBoard.boardArray[index] = marker;
+
     gameBoard.displayBoard();
   };
   return { getName, getMarker, placeMarker };
@@ -41,12 +38,15 @@ const gameController = (() => {
   const clickSpace = () => {
     gameBoard.getSpaces.forEach((space, spaceIndex) => {
       space.addEventListener("click", () => {
-        takeTurn(spaceIndex);
+        if (gameBoard.boardArray[spaceIndex] == "") {
+          takeTurn(spaceIndex);
+        }
       });
     });
   };
   const takeTurn = (space) => {
     currentPlayer.placeMarker(space);
+
     changePlayer();
   };
 
