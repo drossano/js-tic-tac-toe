@@ -62,6 +62,7 @@ const gameController = (() => {
   const takeTurn = (space) => {
     currentPlayer.placeMarker(space);
     checkForWin(currentPlayer.getMarker());
+    checkForTie();
     changePlayer();
   };
   const clickSpace = () => {
@@ -128,9 +129,10 @@ const gameController = (() => {
     ];
 
     const winLines = [].concat(horizontals, verticals, diagonals);
-    console.log(winner(winLines, marker));
+    winner(winLines, marker);
   };
 
+  const checkForTie = () => !gameBoard.boardArray.some((space) => space === "");
   return { clickSpace };
 })();
 gameController.clickSpace();
