@@ -61,7 +61,7 @@ const gameController = (() => {
   };
   const takeTurn = (space) => {
     currentPlayer.placeMarker(space);
-
+    checkForWin(currentPlayer.getMarker());
     changePlayer();
   };
   const clickSpace = () => {
@@ -72,6 +72,63 @@ const gameController = (() => {
         }
       });
     });
+  };
+
+  const winner = (checkLines, marker) =>
+    checkLines.some((line) => line.every((space) => space === marker));
+
+  const checkForWin = (marker) => {
+    const horizontals = [
+      [
+        gameBoard.boardArray[0],
+        gameBoard.boardArray[1],
+        gameBoard.boardArray[2],
+      ],
+      [
+        gameBoard.boardArray[3],
+        gameBoard.boardArray[4],
+        gameBoard.boardArray[5],
+      ],
+      [
+        gameBoard.boardArray[6],
+        gameBoard.boardArray[7],
+        gameBoard.boardArray[8],
+      ],
+    ];
+
+    const verticals = [
+      [
+        gameBoard.boardArray[0],
+        gameBoard.boardArray[3],
+        gameBoard.boardArray[6],
+      ],
+      [
+        gameBoard.boardArray[1],
+        gameBoard.boardArray[4],
+        gameBoard.boardArray[7],
+      ],
+      [
+        gameBoard.boardArray[2],
+        gameBoard.boardArray[5],
+        gameBoard.boardArray[8],
+      ],
+    ];
+
+    const diagonals = [
+      [
+        gameBoard.boardArray[0],
+        gameBoard.boardArray[4],
+        gameBoard.boardArray[8],
+      ],
+      [
+        gameBoard.boardArray[2],
+        gameBoard.boardArray[4],
+        gameBoard.boardArray[6],
+      ],
+    ];
+
+    const winLines = [].concat(horizontals, verticals, diagonals);
+    console.log(winner(winLines, marker));
   };
 
   return { clickSpace };
