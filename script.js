@@ -52,23 +52,27 @@ const Player = (name, marker) => {
 const gameController = (() => {
   const players = [Player("Dean", "X"), Player("Bob", "O")];
   let currentPlayer = players[0];
-  const changePlayer = () => {
+  let previousPlayer = players[1];
+  const changePlayers = () => {
     if (currentPlayer === players[0]) {
       currentPlayer = players[1];
+      previousPlayer = players[0];
     } else {
       currentPlayer = players[0];
+      previousPlayer = players[1];
     }
   };
   const takeTurn = (space) => {
     currentPlayer.placeMarker(space);
-    checkForWin(currentPlayer.getMarker());
-    checkForTie();
-    changePlayer();
+    changePlayers();
   };
   const clickSpace = () => {
     gameBoard.getSpaces.forEach((space, spaceIndex) => {
       space.addEventListener("click", () => {
-        if (gameBoard.boardArray[spaceIndex] == "") {
+        if (
+          checkForWin(previousPlayer.getMarker()) === false &&
+          gameBoard.boardArray[spaceIndex] === ""
+        ) {
           takeTurn(spaceIndex);
         }
       });
@@ -77,7 +81,6 @@ const gameController = (() => {
 
   const winner = (checkLines, marker) =>
     checkLines.some((line) => line.every((space) => space === marker));
-
   const checkForWin = (marker) => {
     const horizontals = [
       [
@@ -129,7 +132,7 @@ const gameController = (() => {
     ];
 
     const winLines = [].concat(horizontals, verticals, diagonals);
-    winner(winLines, marker);
+    return winner(winLines, marker);
   };
 
   const checkForTie = () => !gameBoard.boardArray.some((space) => space === "");
