@@ -65,6 +65,9 @@ const gameController = (() => {
   const takeTurn = (space) => {
     currentPlayer.placeMarker(space);
     changePlayers();
+    if (checkForWin(previousPlayer.getMarker()) == true) {
+      alert(`${previousPlayer.getName()} wins!`);
+    }
   };
   const clickSpace = () => {
     gameBoard.getSpaces.forEach((space, spaceIndex) => {
